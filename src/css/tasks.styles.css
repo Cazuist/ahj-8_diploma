@@ -1,0 +1,56 @@
+.task-block {
+  display: flex;
+  flex-direction: column; 
+  padding: 5px 10px;
+
+  box-sizing: border-box;
+  border: 2px solid seagreen;
+  border-radius: 10px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background-color: honeydew;
+  box-shadow: 3px 3px 3px green;
+}
+
+.task-block:not(:last-of-type) {
+  margin-bottom: 10px;
+}
+
+.task-block.text-block {
+  min-width: 300px;
+}
+
+.task_block_header,
+.task_block_footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 5px;
+}
+
+.task_block_header {
+  border-bottom: 1px solid seagreen;
+}
+
+.task_block_main {
+  min-height: 50px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.task_block_footer {
+  padding-top: 5px;
+  border-top: 1px solid seagreen;
+}
+
+.header_status_box,
+.header_controls_box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer_time_box {
+  color: green;
+  font-style: italic;
+  font-size: 14px;
+}
