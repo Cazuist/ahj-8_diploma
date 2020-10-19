@@ -28,3 +28,15 @@ export function isValidCoords(coords) {
 
   return false;
 }
+
+export function delTaskFromState(state, taskId) {
+  state.tasks = state.tasks.filter(({ id }) => id !== taskId);
+}
+
+export function getTaskById(state, taskId) {
+  return state.tasks.find(({ id }) => id === taskId);
+}
+
+export function isPinnedTasckExist(state) {
+  return state.tasks.some(({ isPinned }) => isPinned);
+}

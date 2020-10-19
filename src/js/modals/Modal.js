@@ -1,13 +1,14 @@
 export default class Modal {
-  constructor(parent) {
+  constructor(parent, type) {
     this.parent = parent;
+    this.type = type;
     this.init();
   }
 
   init() {
     this.bindToDom();
-    this.wrapper = document.querySelector('[data-type]');
-    this.form = document.querySelector('form');
+    this.wrapper = document.querySelector(`div[data-type="${this.type}"]`);
+    this.form = document.querySelector(`form[data-type=${this.type}]`);
   }
 
   bindToDom() {

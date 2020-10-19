@@ -2,8 +2,8 @@ import Modal from './Modal';
 
 export default class GeoAddModal extends Modal {
   // eslint-disable-next-line  no-useless-constructor
-  constructor(parent) {
-    super(parent);
+  constructor(parent, type = 'geoModal') {
+    super(parent, type);
     this.errorBox = document.querySelector('.error-box');
   }
 
@@ -11,7 +11,7 @@ export default class GeoAddModal extends Modal {
   createMarkup() {
     return `
       <div class="modal modal-wrapper hidden"  data-type="geoModal">
-        <form class="form-modal geo-form-modal " novalidate>
+        <form class="form-modal geo-form-modal" data-type="geoModal" novalidate>
           <div class="form-title">Что-то пошло не так!</div>
           <p class="message-content">
             К сожалению нам не удалось определить ваше местоположение.

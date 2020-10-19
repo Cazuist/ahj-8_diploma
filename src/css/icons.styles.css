@@ -150,6 +150,18 @@
   content: "\f08d";
 }
 
+.pinned_icon.is-pinned::before {
+  content: "\f08d";
+  color: crimson;
+  font-size: 18px;   
+}
+
 .favorite_icon::before {
   content: "\f006";
+}
+
+.favorite_icon.is-favorite::before {
+  content: "\f005";
+  color: darkorange;
+  font-size: 18px;
 }

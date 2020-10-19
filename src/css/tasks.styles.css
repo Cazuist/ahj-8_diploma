@@ -17,7 +17,9 @@
 }
 
 .task-block.text-block {
+  width: 80%;
   min-width: 300px;
+  align-self: center;
 }
 
 .task_block_header,
@@ -53,4 +55,10 @@
   color: green;
   font-style: italic;
   font-size: 14px;
+}
+
+.footer_coords_box {
+  font-size: 14px;
+
+  color: gray;
 }

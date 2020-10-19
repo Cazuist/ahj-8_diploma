@@ -1,4 +1,8 @@
 import GeoAddModal from './modals/GeoAddModal';
+import DeleteModal from './modals/DeleteModal';
+import EditModal from './modals/EditModal';
+import DragDropModal from './modals/DragDropModal';
+
 import eventHandlers from './handlers/eventHandlers';
 
 export default class ApiManager {
@@ -11,6 +15,9 @@ export default class ApiManager {
       tasks: [],
       conditions: { geo: true, pinnedTask: null },
     };
+
+    this.taskUnderAction = null;
+    this.stateTask = null;
   }
 
   init() {
@@ -29,6 +36,9 @@ export default class ApiManager {
   initModals() {
     this.modals = {
       geoModal: new GeoAddModal(document.body),
+      delModal: new DeleteModal(document.body),
+      editModal: new EditModal(document.body),
+      dragModal: new DragDropModal(document.body),
     };
   }
 
@@ -58,7 +68,7 @@ export default class ApiManager {
   }
 
   onStickClick(event) {
-    eventHandlers.onStickClickHandler(event, this);
+    eventHandlers.onStickClickHandler.call(this, event);
   }
 
   onModalClick(event) {

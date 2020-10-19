@@ -1,15 +1,13 @@
-export default function onStickClickHandler(event, manager) {
-  const { target, target: { classList } } = event;
+export default function onStickClickHandler(event) {
+  const { /* target, */ target: { classList } } = event;
 
   if (classList.contains('geo_icon')) {
     classList.toggle('geo_true');
-    manager.state.conditions.geo = !manager.state.conditions.geo;
+    this.state.conditions.geo = !this.state.conditions.geo;
+    return;
+  }
 
-    if (classList.contains('geo_true')) {
-      target.title = 'Switch off geolocation';
-      return;
-    }
-
-    target.title = 'Switch on geolocation';
+  if (classList.contains('upload_icon')) {
+    this.modals.dragModal.show();
   }
 }
