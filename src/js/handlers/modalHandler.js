@@ -1,4 +1,3 @@
-import TextTask from '../tasks/TextTask';
 import * as fn from '../functions';
 
 export default function modalHandler(event) {
@@ -19,10 +18,8 @@ export default function modalHandler(event) {
 
   if (type === 'geoModal') {
     const coords = modal.getCoordinates();
-    const html = this.inputEl.innerHTML;
-
     if (fn.isValidCoords(coords)) {
-      fn.makeTaskActions(this, TextTask, html, coords);
+      fn.updateCoords(this.taskUnderAction, coords);
       modal.hide();
       return;
     }

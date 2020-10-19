@@ -25,6 +25,7 @@ export default function taskHandler(event) {
 
   if (classList.contains('del_icon')) {
     this.modals.delModal.show();
+    // Изменение на сервере по ID {
     return;
   }
 
@@ -38,7 +39,7 @@ export default function taskHandler(event) {
 
   if (classList.contains('pinned_icon')) {
     if (fn.isPinnedTasckExist(this.state)
-       && !classList.contains('is-pinned')) {
+      && !classList.contains('is-pinned')) {
       return;
     }
 
@@ -46,5 +47,10 @@ export default function taskHandler(event) {
     this.stateTask.isPinned = !this.stateTask.isPinned;
 
     // Изменение на сервере по ID
+  }
+
+  if (classList.contains('download_icon')) {
+    const link = this.taskUnderAction.querySelector('a');
+    link.click();
   }
 }

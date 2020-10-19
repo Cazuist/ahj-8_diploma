@@ -31,6 +31,7 @@ export default class ApiManager {
     this.footerSticks = document.querySelectorAll('footer .icon');
     this.tasksBoxEl = document.querySelector('.main-container_content');
     this.forms = document.querySelectorAll('.form-modal');
+    this.uploadEl = document.querySelector('.upload_input');
   }
 
   initModals() {
@@ -57,6 +58,7 @@ export default class ApiManager {
     });
 
     this.tasksBoxEl.addEventListener('click', (event) => this.onTaskClick(event));
+    this.uploadEl.addEventListener('change', (event) => this.onInputEvents(event));
   }
 
   onDOMLoaded() {
@@ -64,7 +66,7 @@ export default class ApiManager {
   }
 
   onInputEvents(event) {
-    eventHandlers.inputHandler(event, this);
+    eventHandlers.inputHandler.call(this, event);
   }
 
   onStickClick(event) {

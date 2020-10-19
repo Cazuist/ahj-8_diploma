@@ -1,24 +1,30 @@
-export function makeTaskActions(manager, Task, content, coords = null) {
-  manager.inputEl.blur();
-  const box = new Task(manager.tasksBoxEl, content, coords);
-  box.init(manager.state);
-  manager.tasksBoxEl.scrollTop = manager.tasksBoxEl.scrollHeight;
-
-  manager.inputEl.textContent = '';
+export function scrollBoxUp(box) {
+  box.scrollTop = box.scrollHeight;
 }
 
-export function createTask(geoStatus, manager, Task, content) {
-  if (!geoStatus) {
-    makeTaskActions(manager, Task, content);
+export function createTask(manager, Task, content) {
+  const box = new Task(content);
+  box.init(manager.tasksBoxEl);
+  manager.taskUnderAction = box;
+
+  if (box.type.includes('text')) {
+    manager.inputEl.blur();
+    manager.inputEl.textContent = '';
+    scrollBoxUp(manager.tasksBoxEl);
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(
-    ({ coords }) => makeTaskActions(manager, Task, content, coords),
-    () => {
-      manager.modals.geoModal.show();
-    },
-  );
+  if (box.type.includes('image')) {
+    manager.uploadEl.value = '';
+  }
+}
+
+export function updateCoords(task, coords) {
+  // const { id } = task;
+  task.updateCoords(coords);
+  task = null;
+
+  // Запрос на сервер на изменение task по ID
 }
 
 export function isValidCoords(coords) {

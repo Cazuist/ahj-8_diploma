@@ -1,12 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 
-export default class TextTask {
-  constructor(container, content, coords = null) {
-    this.container = container;
+export default class Task {
+  constructor(content) {
     this.content = content;
-    this.coords = coords;
-    this.type = 'text';
+    this.coords = null;
     this.isPinned = false;
     this.isFavorite = false;
 
@@ -14,21 +12,29 @@ export default class TextTask {
     this.timestamp = moment().valueOf();
   }
 
-  init(state) {
-    this.addToState(state);
-    this.bindToDOM();
+  init(container) {
+    this.bindToDOM(container);
   }
 
-  bindToDOM() {
-    this.container.insertAdjacentHTML('beforeend', this.createMarkup());
+  bindToDOM(container) {
+    container.insertAdjacentHTML('beforeend', this.createMarkup());
   }
 
-  getCoords(coords) {
-    if (!coords) {
-      return '--.----, --.----';
-    }
+  setCoords(coords) {
+    this.coords = coords;
+  }
 
+  getCoordsString() {
     return `${this.coords.latitude.toFixed(4)}, ${this.coords.longitude.toFixed(4)}`;
+  }
+
+  updateCoords(coords) {
+    if (!coords) return;
+
+    this.setCoords(coords);
+    const task = document.querySelector(`[data-id="${this.id}"]`);
+    const coordsEl = task.querySelector('.coords_field');
+    coordsEl.textContent = `[${this.getCoordsString()}]`;
   }
 
   getDate() {

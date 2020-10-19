@@ -138,6 +138,10 @@
   content: "\f1f8";
 }
 
+.download_icon::before {
+  content: "\f045";
+}
+
 .visibility_icon::before {
   content: "\f06e";
 }

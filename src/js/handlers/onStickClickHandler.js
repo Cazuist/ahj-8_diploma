@@ -8,6 +8,6 @@ export default function onStickClickHandler(event) {
   }
 
   if (classList.contains('upload_icon')) {
-    this.modals.dragModal.show();
+    this.uploadEl.dispatchEvent(new MouseEvent('click'));
   }
 }

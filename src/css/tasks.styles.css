@@ -16,10 +16,13 @@
   margin-bottom: 10px;
 }
 
+.task-block {
+  align-self: center;
+}
+
 .task-block.text-block {
   width: 80%;
   min-width: 300px;
-  align-self: center;
 }
 
 .task_block_header,
@@ -61,4 +64,12 @@
   font-size: 14px;
 
   color: gray;
+}
+
+/* Image task ----------------------------*/
+.task_img {
+  box-sizing: border-box;
+  width: 200px;
+
+
 }
