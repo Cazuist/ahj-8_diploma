@@ -5,12 +5,14 @@ export function scrollBoxUp(box) {
 export function createTask(manager, Task, content) {
   const box = new Task(content);
   box.init(manager.tasksBoxEl);
+  manager.state.tasks.push(box);
   manager.taskUnderAction = box;
 
   if (box.type.includes('text')) {
     manager.inputEl.blur();
     manager.inputEl.textContent = '';
     scrollBoxUp(manager.tasksBoxEl);
+
     return;
   }
 

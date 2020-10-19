@@ -14,3 +14,5 @@ box1.init(manager.tasksBoxEl, manager.state);
 const box2 = new TextTask('Test text 2');
 box2.init(manager.tasksBoxEl, manager.state);
 box2.updateCoords(coords);
+
+manager.state.tasks.push(box1, box2);
