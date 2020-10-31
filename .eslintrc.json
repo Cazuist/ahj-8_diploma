@@ -18,6 +18,11 @@
 		"WithStatement"
         ],
 	"no-restricted-globals": "off",
-	"no-param-reassign": "off"
+	"no-param-reassign": "off",
+	"class-methods-use-this": "off",
+	"no-plusplus": "off",
+	"consistent-return": "off",
+	"import/prefer-default-export": "off",
+	"import/no-named-as-default": "off"
     }
 }

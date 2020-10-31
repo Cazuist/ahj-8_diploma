@@ -1,13 +1,11 @@
 import Modal from './Modal';
 
 export default class GeoAddModal extends Modal {
-  // eslint-disable-next-line  no-useless-constructor
-  constructor(parent, type = 'geoModal') {
-    super(parent, type);
+  constructor(type = 'geoModal') {
+    super(type);
     this.errorBox = document.querySelector('.error-box');
   }
 
-  // eslint-disable-next-line class-methods-use-this
   createMarkup() {
     return `
       <div class="modal modal-wrapper hidden"  data-type="geoModal">
@@ -36,16 +34,17 @@ export default class GeoAddModal extends Modal {
   }
 
   getCoordinates() {
-    const x = this.form.querySelector('.lat_input').value.trim().replace(',', '.');
-    const y = this.form.querySelector('.long_input').value.trim().replace(',', '.');
+    const x = this.wrapper.querySelector('.lat_input').value.trim().replace(',', '.');
+    const y = this.wrapper.querySelector('.long_input').value.trim().replace(',', '.');
 
     return { latitude: +x, longitude: +y };
   }
 
   showError(message) {
-    this.errorBox.textContent = message;
-    this.errorBox.classList.remove('hidden');
+    const errorBox = document.querySelector('.error-box');
+    errorBox.textContent = message;
+    errorBox.classList.remove('hidden');
 
-    setTimeout(() => this.errorBox.classList.add('hidden'), 2000);
+    setTimeout(() => errorBox.classList.add('hidden'), 2000);
   }
 }

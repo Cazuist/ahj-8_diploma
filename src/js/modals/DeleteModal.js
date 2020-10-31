@@ -1,12 +1,10 @@
 import Modal from './Modal';
 
 export default class DeleteModal extends Modal {
-  // eslint-disable-next-line  no-useless-constructor
-  constructor(parent, type = 'delModal') {
-    super(parent, type);
+  constructor(type = 'delModal') {
+    super(type);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   createMarkup() {
     return `
       <div class="modal modal-wrapper hidden"  data-type="delModal">

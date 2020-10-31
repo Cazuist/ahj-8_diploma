@@ -9,7 +9,9 @@
   font-style: normal;
 }
 
-.icon {  
+.icon,
+.status_icon {  
+  position: relative;
   display: flex;  
   width: 30px;
   height: 30px; 
@@ -20,25 +22,89 @@
   font-family: "FontAwesome";
   font-size: 14px;
 
-  border: 1px solid gray;
-  border-radius: 7px;
+  border: 1px solid gray;  
 
-  opacity: 0.8;
+  opacity: 0.8;  
+  user-select: none;
+}
+
+.icon {
+  border-radius: 7px;
   cursor: pointer;
+}
+
+.status_icon {
+  border-radius: 50%;
 }
 
 .icon:hover {
   border-width: 2px;
   opacity: 1;
+
+  transform: scale(1.1);
 }
 
-.icon:not(:last-of-type) {
+.icon:not(:last-of-type),
+.status_icon:not(:last-of-type) {
   margin-right: 5px;
 }
 
 .manager-aside .icon {
   margin-right: 10px;
   background-color: beige;
+}
+
+.icon.active {
+  pointer-events: auto;
+  background-color: lightgray;
+  border-width: 2px;
+  opacity: 1;
+}
+
+.send_icon.active {
+  color: white;
+  background-color: mediumaquamarine;
+}
+
+/* Control aside icon -------------------*/
+.connection_icon {
+  background-color: palegreen;
+  border: 2px solid green;
+}
+
+.connection_icon.offline {
+  background-color: white;
+  border: none;
+}
+
+.geo_access_icon.switch-on {
+  background-color: palegreen;
+  border: 2px solid green;
+}
+
+.geo_access_icon.switch-off {
+  background-color: yellow;
+  border: 2px solid orangered;
+}
+
+.connection_icon::before {
+  content: "\f233";
+}
+
+.geo_access_icon::before {
+  content: "\f279";
+}
+
+.offline.connection_icon::after,
+.disabled_geo.geo_access_icon::after,
+.geo_send_icon.blocked::after {
+  position: absolute;
+  top: -2px;
+  left: 0;
+
+  color: red;
+  font-size: 33px;
+  content: "\f05e";
 }
 
 /* Footer icons -------------------------*/
@@ -102,6 +168,10 @@
   content: "\f118";
 }
 
+.geo_send_icon::before {
+  content: "\f278";
+}
+
 .geo_icon::before {
   content: "\f041";
 }
@@ -154,18 +224,18 @@
   content: "\f08d";
 }
 
-.pinned_icon.is-pinned::before {
-  content: "\f08d";
-  color: crimson;
-  font-size: 18px;   
-}
-
 .favorite_icon::before {
   content: "\f006";
 }
 
-.favorite_icon.is-favorite::before {
+.is-favorite .favorite_icon::before {
   content: "\f005";
   color: darkorange;
   font-size: 18px;
+}
+
+.pinned_close_icon::before {
+  content: "\f00d";
+  color: gray;
+  font-size: 20px;
 }

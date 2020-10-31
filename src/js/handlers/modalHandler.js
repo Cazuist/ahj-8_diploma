@@ -1,13 +1,17 @@
-import * as fn from '../functions';
+import {
+  delTaskFromState,
+  updateStates,
+} from '../functions/functions';
+import { updOnAction } from '../functions/fileManagerFunctions';
 
 export default function modalHandler(event) {
   const { target, target: { classList } } = event;
   const { type } = target.closest('.modal-wrapper').dataset;
   const modal = this.modals[type];
 
-  if (!classList.contains('modal-btn')) {
-    return;
-  }
+  if (type === 'geoModal') return;
+
+  if (!classList.contains('modal-btn')) return;
 
   event.preventDefault();
 
@@ -16,38 +20,30 @@ export default function modalHandler(event) {
     return;
   }
 
-  if (type === 'geoModal') {
-    const coords = modal.getCoordinates();
-    if (fn.isValidCoords(coords)) {
-      fn.updateCoords(this.taskUnderAction, coords);
-      modal.hide();
-      return;
-    }
-
-    const message = 'Вы ввели неправильные координаты!';
-    modal.showError(message);
-    return;
-  }
-
   if (type === 'delModal') {
     const { id } = this.taskUnderAction.dataset;
+    const deletingTask = this.state.tasks.find((task) => task.id === id);
+
+    updOnAction('deleteTask',
+      document.querySelector('.file_manager'),
+      deletingTask);
+
+    modal.hide();
     this.taskUnderAction.remove();
     this.taskUnderAction = null;
-    modal.hide();
 
-    fn.delTaskFromState(this.state, id);
-
-    // Запрос на сервер по ID
+    delTaskFromState(this.state, id);
+    updateStates(this, 'deleteTask', { id });
     return;
   }
 
   if (type === 'editModal') {
+    const { id } = this.taskUnderAction.dataset;
     modal.setValuesToDOM(this.taskUnderAction);
-    modal.setValuesToTask(this.stateTask);
+    const editedTask = this.state.tasks.find((task) => task.id === id);
+    modal.setValuesToTask(editedTask);
     modal.hide();
+    updateStates(this, 'editTask', { task: editedTask, id });
     this.taskUnderAction = null;
-    this.stateTask = null;
-
-    // Запрос на сервер по ID
   }
 }

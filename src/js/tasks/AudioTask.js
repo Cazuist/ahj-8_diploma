@@ -1,19 +1,18 @@
 import Task from './Task';
 
-export default class ImageTask extends Task {
+export default class AudioTask extends Task {
   constructor(data) {
     super(data);
     this.src = data.src;
     this.name = data.name;
-    this.type = 'image';
+    this.type = 'audio';
   }
 
   createMarkup() {
     return `
-      <div class="task task-block image-block ${this.getSpecialsClasses()}" 
+      <div class="task task-block audio-block ${this.getSpecialsClasses()}"
       data-id="${this.id}"
-      data-task-type="image">
-
+      data-task-type="audio">
         <div class="task_block_header">
           <div class="header_status_box">
             <span class="icon header_status pinned_icon"></span>
@@ -28,11 +27,8 @@ export default class ImageTask extends Task {
         </div>
 
         <div class="task_block_main">
-          <div class="preview_box">
-            <img class="image-block_preview_img" src="${this.src}">
-          </div>          
-          <span class="img_name_box">${this.getFormattedName(this.name)}</span>
-          <a href="${this.src}" class="download_link hidden" download="${this.name}"></a>
+          <audio class="task_audio" src="${this.src}" controls>
+          <a href="${this.src}" class="download_link hidden" download="${this.name}"></a>         
         </div>
         
         <div class="task_block_footer">

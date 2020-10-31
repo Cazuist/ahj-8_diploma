@@ -2,18 +2,17 @@ import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 
 export default class Task {
-  constructor(content) {
-    this.content = content;
-    this.coords = null;
-    this.isPinned = false;
-    this.isFavorite = false;
-
-    this.id = uuidv4();
-    this.timestamp = moment().valueOf();
+  constructor(data) {
+    this.isPinned = data.isPinned || false;
+    this.isFavorite = data.isFavorite || false;
+    this.id = data.id || uuidv4();
+    this.timestamp = data.timestamp || moment().valueOf();
+    this.coords = data.coords || null;
   }
 
-  init(container) {
+  init(container, state) {
     this.bindToDOM(container);
+    this.addToState(state);
   }
 
   bindToDOM(container) {
@@ -25,22 +24,18 @@ export default class Task {
   }
 
   getCoordsString() {
+    if (!this.coords) return '--.----, ---.----';
     return `${this.coords.latitude.toFixed(4)}, ${this.coords.longitude.toFixed(4)}`;
-  }
-
-  updateCoords(coords) {
-    if (!coords) return;
-
-    this.setCoords(coords);
-    const task = document.querySelector(`[data-id="${this.id}"]`);
-    const coordsEl = task.querySelector('.coords_field');
-    coordsEl.textContent = `[${this.getCoordsString()}]`;
   }
 
   getDate() {
     const now = moment(this.timestamp);
     moment.locale('ru');
-    return now.format('HH:mm');
+    return now.format('DD.MM.YY HH:mm');
+  }
+
+  getSpecialsClasses() {
+    return `${this.isFavorite ? 'is-favorite' : ''} ${this.isPinned ? 'is-pinned hidden' : ''}`;
   }
 
   addToState(state) {
@@ -53,5 +48,16 @@ export default class Task {
 
   switchFavorite() {
     this.isFavorite = !this.isFavorite;
+  }
+
+  getFormattedName(name) {
+    let basename = name.split('.').slice(0, -1).join('.');
+    const extname = name.split('.').slice(-1)[0];
+
+    if (basename.length > 15) {
+      basename = `${basename.slice(0, 6)}...${basename.slice(-7)}`;
+    }
+
+    return `${basename}.${extname}`;
   }
 }

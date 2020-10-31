@@ -1,12 +1,10 @@
 import Modal from './Modal';
 
 export default class EditModal extends Modal {
-  // eslint-disable-next-line  no-useless-constructor
-  constructor(parent, type = 'editModal') {
-    super(parent, type);
+  constructor(type = 'editModal') {
+    super(type);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   createMarkup() {
     return `
       <div class="modal modal-wrapper hidden"  data-type="editModal">
@@ -37,22 +35,22 @@ export default class EditModal extends Modal {
   }
 
   setValuesFromTask({ content, coords }) {
-    this.form.querySelector('textarea').value = content;
+    this.wrapper.querySelector('textarea').value = content;
 
     if (!coords) return;
 
-    this.form.querySelector('.lat_input').value = coords.latitude;
-    this.form.querySelector('.long_input').value = coords.longitude;
+    this.wrapper.querySelector('.lat_input').value = coords.latitude;
+    this.wrapper.querySelector('.long_input').value = coords.longitude;
   }
 
   setValuesToTask(task) {
-    task.content = this.form.querySelector('textarea').value;
+    task.content = this.wrapper.querySelector('textarea').value;
   }
 
   setValuesToDOM(task) {
-    const valueFromForm = this.form.querySelector('textarea').value;
+    const valueFromForm = this.wrapper.querySelector('textarea').value;
     const contentBox = task.querySelector('.text-content');
 
-    contentBox.textContent = valueFromForm;
+    contentBox.innerHTML = valueFromForm;
   }
 }

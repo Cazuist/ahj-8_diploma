@@ -2,20 +2,22 @@ export default function onLoadHandler() {
   const geo = document.querySelector('.geo_access_icon');
 
   if (!navigator.geolocation) {
-    this.state.conditions.geo = false;
-    geo.style.backgroundColor = 'red';
-    geo.nextElementSibling.textContent = 'Disabled on your device';
+    this.geoAllowedStatus = false;
+    geo.nextElementSibling.textContent = 'Unsupported geolocotion';
+    document.querySelector('.geo_send_icon').classList.add('blocked');
     return;
   }
 
+  geo.classList.remove('disabled_geo');
+
   navigator.geolocation.getCurrentPosition(
     () => {
-      geo.style.backgroundColor = 'palegreen';
-      geo.nextElementSibling.textContent = 'Anable and allowed';
+      geo.classList.add('switch-on');
+      geo.nextElementSibling.textContent = 'Switched on';
     },
     () => {
-      geo.style.backgroundColor = 'yellow';
-      geo.nextElementSibling.textContent = 'Anable and disallowed';
+      geo.classList.add('switch-off');
+      geo.nextElementSibling.textContent = 'Switched off';
     },
   );
 }

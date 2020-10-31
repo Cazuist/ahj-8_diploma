@@ -1,59 +1,66 @@
-import TextTask from '../tasks/TextTask';
-import ImageTask from '../tasks/ImageTask';
-import * as fn from '../functions';
+import { tasksTypes } from '../tasks/tasksTypes';
+import {
+  createUploadTask,
+  createTextTask,
+  parseInputContent,
+  updateStates,
+} from '../functions/functions';
+import { newTaskStream$ } from '../functions/newTaskFunctions';
 
 export default function inputHandler(event) {
-  const { target } = event;
+  const { target, type, currentTarget } = event;
   const { classList } = target;
 
-  if (classList.contains('upload_input')) {
-    const file = event.target.files[0];
-    const { type /* name */ } = file;
+  if (type === 'input') {
+    const sendBtn = document.querySelector('.send_icon');
+    const canSand = sendBtn.classList.contains('active');
 
-    if (!type) {
-      // Обработка не поддерживаемых файлов
+    if (currentTarget.value.trim() && !canSand) {
+      sendBtn.classList.add('active');
       return;
     }
 
-    const src = URL.createObjectURL(file);
+    if (!currentTarget.value.trim() && canSand) {
+      sendBtn.classList.remove('active');
+    }
+    return;
+  }
 
-    if (type.includes('image')) {
-      fn.createTask(this, ImageTask, src);
+  if ((!event.shiftKey && !event.ctrlKey) && event.key === 'Enter') {
+    event.preventDefault();
+    const message = this.inputEl.value;
 
-      if (!this.state.conditions.geo) {
-        /// Обновляем состояние на сервере и клиенте сразу
+    if (!message.trim()) {
+      return;
+    }
+
+    const Task = tasksTypes.message;
+    const content = parseInputContent(message);
+
+    newTaskStream$(this).subscribe((data) => {
+      if (data === 'Invalid coords') {
+        this.getModal('geoModal').showError('Вы ввели неправильные координаты!');
         return;
       }
 
-      navigator.geolocation.getCurrentPosition(
-        ({ coords }) => fn.updateCoords(this.taskUnderAction, coords),
-        () => {
-          this.modals.geoModal.show();
-        },
-      );
-    }
+      createTextTask(this, Task, { content, coords: data });
+      updateStates(this, 'newTask', this.creatingTask);
+      this.creatingTask = null;
+      document.querySelector('.send_icon').classList.remove('active');
+    });
   }
 
-  if (!event.shiftKey && event.key === 'Enter') {
-    event.preventDefault();
-    const html = this.inputEl.textContent.trim();
+  if (classList.contains('upload_input')) {
+    const file = event.target.files[0];
 
-    if (!html) {
-      return;
-    }
+    newTaskStream$(this).subscribe((data) => {
+      if (data === 'Invalid coords') {
+        this.getModal('geoModal').showError('Вы ввели неправильные координаты!');
+        return;
+      }
 
-    fn.createTask(this, TextTask, html);
-
-    if (!this.state.conditions.geo) {
-      /// Обновляем состояние на сервере и клиенте сразу
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => fn.updateCoords(this.taskUnderAction, coords),
-      () => {
-        this.modals.geoModal.show();
-      },
-    );
+      createUploadTask(this, file, data);
+      document.querySelector('.send_icon').classList.remove('active');
+    });
   }
 }

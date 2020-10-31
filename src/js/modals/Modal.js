@@ -1,6 +1,5 @@
 export default class Modal {
-  constructor(parent, type) {
-    this.parent = parent;
+  constructor(type) {
     this.type = type;
     this.init();
   }
@@ -8,7 +7,6 @@ export default class Modal {
   init() {
     this.bindToDom();
     this.wrapper = document.querySelector(`div[data-type="${this.type}"]`);
-    this.form = document.querySelector(`form[data-type=${this.type}]`);
   }
 
   bindToDom() {
@@ -21,16 +19,10 @@ export default class Modal {
 
   hide() {
     this.wrapper.classList.add('hidden');
-    this.form.reset();
+    this.getForm().reset();
   }
 
-  setPosition(target) {
-    const targetRect = target.getBoundingClientRect();
-    const targetTop = targetRect.y;
-    const targetLeft = targetRect.x;
-    const modWidth = this.form.offsetWidth;
-
-    this.form.style.top = `${targetTop + window.pageYOffset + 45}px`;
-    this.form.style.left = `${targetLeft + window.pageXOffset - (modWidth - targetRect.width) / 2}px`;
+  getForm() {
+    return document.querySelector(`form[data-type=${this.type}]`);
   }
 }
