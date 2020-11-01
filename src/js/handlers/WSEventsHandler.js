@@ -4,6 +4,7 @@ import {
   scrollBoxUp,
   getPinnedType,
   getTaskById,
+  delTaskFromState,
 } from '../functions/functions';
 import { updFileMngr } from '../functions/fileManagerFunctions';
 import taskTypes from '../tasks/tasksTypes';
@@ -15,7 +16,6 @@ export default class WSEventsHandler {
 
   onWSOpen(manager) {
     this.clearInterval();
-    manager.connectionStatus = true;
 
     document.querySelector('.connection_icon').classList.remove('offline');
     document.querySelector('.connection_icon~* ').textContent = 'Online';
@@ -25,7 +25,6 @@ export default class WSEventsHandler {
   }
 
   onWSClose(manager) {
-    manager.connectionStatus = false;
     manager.ws = null;
 
     document.querySelector('.connection_icon').classList.add('offline');
@@ -34,30 +33,34 @@ export default class WSEventsHandler {
   }
 
   onWSMessage(manager, event) {
-    const { method, data, types } = JSON.parse(event.data);
-    if (method === 'getState') {
-      manager.state.conditions = data.conditions;
+    const { method, data } = JSON.parse(event.data);
 
-      if (!data.conditions.geo) {
+    if (method === 'getState') {
+      manager.state.conditions = data.state.conditions;
+      const { tasks } = data.state;
+
+      if (!data.state.conditions.geo) {
         document.querySelector('.geo_icon').classList.remove('geo_true');
       }
 
-      data.tasks.forEach((task) => {
+      tasks.forEach((task) => {
         const { type } = task;
         createTextTask(manager, taskTypes[type], task);
         scrollBoxUp(manager.tasksBoxEl);
       });
 
-      if (data.conditions.pinnedTask) {
-        const pinnedMessage = document.querySelector('.pinned_message');
-        pinnedMessage.classList.remove('hidden');
+      updFileMngr(data.types, document.querySelector('.file_manager'));
+      const pinnedId = data.state.conditions.pinnedTask;
 
-        document.querySelector('.pinned_info_box_type')
-          .textContent = getPinnedType(getTaskById(manager.state, data.conditions.pinnedTask));
-      }
+      if (!pinnedId) return;
 
-      updFileMngr(types, document.querySelector('.file_manager'));
-      // localStorage.setItem('chaos', JSON.stringify(this.state));
+      manager.showPinnedMessage(pinnedId);
+      const pinnedMessage = document.querySelector('.pinned_message');
+      pinnedMessage.classList.remove('hidden');
+      document.querySelector('.pinned_info_box_type')
+        .textContent = getPinnedType(getTaskById(manager.state, pinnedId));
+
+      /* localStorage.setItem('chaos', JSON.stringify(this.state)); */
       return;
     }
 
@@ -72,6 +75,58 @@ export default class WSEventsHandler {
       });
 
       manager.tasksBoxEl.scrollTop = 20;
+      return;
+    }
+
+    if (method === 'newTask') {
+      manager.state.conditions.lastChange = data.newTask.timestamp;
+      const { type } = data.newTask;
+      createTextTask(manager, taskTypes[type], data.newTask);
+      scrollBoxUp(manager.tasksBoxEl);
+      return;
+    }
+
+    manager.state.conditions.lastChange = data.lastChange;
+
+    if (method === 'deleteTask') {
+      delTaskFromState(manager.state, data.id);
+      document.querySelector(`[data-id="${data.id}"]`).remove();
+      return;
+    }
+
+    if (method === 'switchGeo') {
+      if (manager.state.conditions.geo) {
+        manager.state.conditions.geo = false;
+      } else {
+        manager.state.conditions.geo = true;
+      }
+
+      document.querySelector('.geo_icon').classList.toggle('geo_true');
+      return;
+    }
+
+    if (method === 'switchFavorite') {
+      getTaskById(manager.state, data.id).switchFavorite();
+      document.querySelector(`[data-id="${data.id}"]`).classList.toggle('is-favorite');
+      return;
+    }
+
+    if (method === 'editTask') {
+      getTaskById(manager.state, data.id).content = data.task.content;
+      const editingContent = document.querySelector(`[data-id="${data.id}"] .text-content`);
+      editingContent.innerHTML = data.task.content;
+      return;
+    }
+
+    if (method === 'switchPinnedOn') {
+      manager.state.conditions.pinnedTask = data.id;
+      manager.showPinnedMessage(data.id);
+      getTaskById(manager.state, data.id).isPinned = true;
+      return;
+    }
+
+    if (method === 'switchPinnedOff') {
+      manager.hidePinnedMessage();
     }
   }
 

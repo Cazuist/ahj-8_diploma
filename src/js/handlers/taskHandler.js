@@ -23,6 +23,12 @@ export default function taskHandler(event) {
     return;
   }
 
+  if (classList.contains('download_icon')) {
+    const link = this.taskUnderAction.querySelector('a');
+    link.click();
+    return;
+  }
+
   if (classList.contains('favorite_icon')) {
     this.taskUnderAction.classList.toggle('is-favorite');
     stateTask.switchFavorite();
@@ -42,28 +48,17 @@ export default function taskHandler(event) {
     return;
   }
 
-  if (classList.contains('download_icon')) {
-    const link = this.taskUnderAction.querySelector('a');
-    link.click();
-    return;
-  }
-
   if (classList.contains('pinned_icon')) {
     if (this.state.conditions.pinnedTask) {
       return;
     }
 
-    stateTask.switchPinned();
     this.showPinnedMessage(id);
     updateStates(this, 'switchPinnedOn', { id });
     return;
   }
 
   if (classList.contains('pinned_close_icon')) {
-    const pinnedTaskId = this.state.conditions.pinnedTask;
-    const pinnedTask = getTaskById(this.state, pinnedTaskId);
-    pinnedTask.switchPinned();
-
     this.hidePinnedMessage();
     updateStates(this, 'switchPinnedOff');
     return;

@@ -23,6 +23,11 @@ export function updateStates(manager, type, data = {}) {
   const request = { method, data };
   let { lastChange } = manager.state.conditions;
 
+  if (!manager.ws) {
+    showErrorBox('No server connection!');
+    return;
+  }
+
   if (type === 'newTask') {
     lastChange = manager.creatingTask.timestamp;
   }

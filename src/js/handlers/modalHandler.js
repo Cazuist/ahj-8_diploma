@@ -5,6 +5,7 @@ import {
 import { updOnAction } from '../functions/fileManagerFunctions';
 
 export default function modalHandler(event) {
+  event.preventDefault();
   const { target, target: { classList } } = event;
   const { type } = target.closest('.modal-wrapper').dataset;
   const modal = this.modals[type];
@@ -12,8 +13,6 @@ export default function modalHandler(event) {
   if (type === 'geoModal') return;
 
   if (!classList.contains('modal-btn')) return;
-
-  event.preventDefault();
 
   if (classList.contains('cancel-btn')) {
     modal.hide();

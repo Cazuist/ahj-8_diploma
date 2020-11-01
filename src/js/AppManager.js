@@ -14,7 +14,6 @@ export default class AppManager {
       conditions: { geo: true, pinnedTask: null, lastChange: null },
     };
 
-    this.connectionStatus = false;
     this.geoAllowedStatus = true;
     this.creatingTask = null;
     this.taskUnderAction = null;
@@ -36,6 +35,7 @@ export default class AppManager {
     this.uploadEl = document.querySelector('.upload_input');
     this.dragableEl = document.querySelector('.draggable_area');
     this.controlPanel = document.querySelector('.media_status_aside');
+    this.pinnedMessage = document.querySelector('.pinned_message');
   }
 
   initModals() {
@@ -103,6 +103,10 @@ export default class AppManager {
       eventHandlers.taskHandler.call(this, event);
     });
 
+    this.pinnedMessage.addEventListener('click', (event) => {
+      eventHandlers.taskHandler.call(this, event);
+    });
+
     this.tasksBoxEl.addEventListener('scroll', () => {
       eventHandlers.scrollHandler.call(this);
     });
@@ -133,24 +137,27 @@ export default class AppManager {
   }
 
   hidePinnedMessage() {
-    const pinnedMessage = document.querySelector('.pinned_message');
     const pinnedElement = document.querySelector('.is-pinned');
+    const pinnedTask = this.state.tasks.find(({ isPinned }) => isPinned);
 
-    pinnedMessage.classList.add('hidden');
+    this.pinnedMessage.classList.add('hidden');
     pinnedElement.classList.remove('hidden', 'is-pinned');
     pinnedElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
+
+    pinnedTask.switchPinned();
     this.state.conditions.pinnedTask = null;
   }
 
   showPinnedMessage(id) {
-    const pinnedMessage = document.querySelector('.pinned_message');
     const pinnedTask = getTaskById(this.state, id);
+    const pinnedElement = document.querySelector(`[data-id="${id}"]`);
 
-    pinnedMessage.classList.remove('hidden');
-    pinnedMessage.style.top = `${this.tasksBoxEl.scrollTop}px`;
-    this.taskUnderAction.classList.add('is-pinned', 'hidden');
+    pinnedTask.isPinned = true;
+    this.pinnedMessage.classList.remove('hidden');
+    this.pinnedMessage.style.top = `${this.tasksBoxEl.scrollTop}px`;
+    pinnedElement.classList.add('is-pinned', 'hidden');
 
-    pinnedMessage.querySelector('.pinned_info_box_type')
+    this.pinnedMessage.querySelector('.pinned_info_box_type')
       .textContent = getPinnedType(pinnedTask);
 
     this.state.conditions.pinnedTask = id;
