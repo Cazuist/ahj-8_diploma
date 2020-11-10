@@ -23,14 +23,14 @@ export default function dragAndDropHandlers(event) {
 
     const file = event.dataTransfer.files[0];
 
-    newTaskStream$(this).subscribe((data) => {
+    const stream$ = newTaskStream$(this).subscribe((data) => {
       if (data === 'Invalid coords') {
         this.getModal('geoModal').showError('Вы ввели неправильные координаты!');
         return;
       }
 
       createUploadTask(this, file, data);
-      document.querySelector('.send_icon').classList.remove('active');
+      stream$.unsubscribe();
     });
   }
 }

@@ -29,7 +29,7 @@ export function updateStates(manager, type, data = {}) {
   }
 
   if (type === 'newTask') {
-    lastChange = manager.creatingTask.timestamp;
+    lastChange = data.timestamp;
   }
 
   if (type === 'deleteTask'
@@ -58,6 +58,14 @@ export function createTextTask(manager, Task, data) {
   manager.creatingTask = newTask;
   updOnAction('addTask', document.querySelector('.file_manager'), manager.creatingTask);
   manager.state.conditions.lastChange = newTask.timestamp;
+}
+
+export function createInfoTask(manager, Task, task) {
+  manager.state.info.push(task.id);
+  const newTask = new Task(task);
+  const html = newTask.createInfoMarkup();
+  manager.ctrlAsideEl.querySelector('.aside_wrapper').insertAdjacentHTML('beforeend', html);
+  manager.ctrlAsideEl.classList.remove('hidden');
 }
 
 export function createUploadTask(manager, file, coords) {
@@ -97,6 +105,15 @@ export function createUploadTask(manager, file, coords) {
   });
 
   reader.readAsDataURL(file);
+}
+
+export function createRecordTask(manager, Task, data) {
+  const newTask = new Task(data);
+  newTask.init(manager.tasksBoxEl, manager.state);
+  scrollBoxUp(manager.tasksBoxEl);
+  updateStates(manager, 'newTask', newTask);
+  updOnAction('addTask', document.querySelector('.file_manager'), newTask);
+  manager.state.conditions.lastChange = newTask.timestamp;
 }
 
 export function isValidCoords(coords) {
@@ -163,6 +180,10 @@ export function getPinnedType(task) {
       return 'Audio message';
     case 'video':
       return 'Video message';
+    case 'video_record':
+      return 'Video record';
+    case 'audio_record':
+      return 'Audio record';
     case 'file':
       return 'File message';
     case 'image':

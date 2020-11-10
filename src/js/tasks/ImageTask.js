@@ -47,4 +47,34 @@ export default class ImageTask extends Task {
       </div>
     `;
   }
+
+  createInfoMarkup() {
+    return `
+      <div class="task info_task-block info_image-block"
+        data-id="${this.id}" 
+        data-task-type="${this.type}">
+
+        <div class="info_task_block_header">
+          ${this.getType(this)}
+        </div>
+
+        <div class="info_task_block_main">
+          <div class="preview_box">
+            <img class="info_image-block_preview_img" src="${this.src}">
+          </div>          
+          <span class="img_name_box">${this.getFormattedName(this.name)}</span>        
+        </div>
+        
+        <div class="task_block_footer info_task_block_footer">
+          <div class="footer_coords_box">
+            <span class="coords_field">[${this.getCoordsString()}]</span>
+          </div>
+
+          <div class="footer_time_box">
+            ${this.getDate()}
+          </div>
+        </div>
+      </div>
+    `;
+  }
 }

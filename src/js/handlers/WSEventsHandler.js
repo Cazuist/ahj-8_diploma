@@ -5,6 +5,7 @@ import {
   getPinnedType,
   getTaskById,
   delTaskFromState,
+  createInfoTask,
 } from '../functions/functions';
 import { updFileMngr } from '../functions/fileManagerFunctions';
 import taskTypes from '../tasks/tasksTypes';
@@ -47,10 +48,15 @@ export default class WSEventsHandler {
         const { type } = task;
         createTextTask(manager, taskTypes[type], task);
         scrollBoxUp(manager.tasksBoxEl);
+        manager.creatingTask = null;
       });
 
       updFileMngr(data.types, document.querySelector('.file_manager'));
       const pinnedId = data.state.conditions.pinnedTask;
+
+      data.state.info.forEach((task) => {
+        createInfoTask(manager, taskTypes[task.type], task);
+      });
 
       if (!pinnedId) return;
 
@@ -65,11 +71,19 @@ export default class WSEventsHandler {
     }
 
     if (method === 'scrollTasks') {
-      manager.state.tasks.unshift(...data);
+      const topTask = manager.state.tasks[0];
 
-      data.reverse().forEach((task) => {
+      const tasksToAdd = [topTask]
+        .concat(data)
+        .sort((a, b) => a.timestamp - b.timestamp);
+
+      manager.state.tasks.shift(0);
+      document.querySelector(`[data-id="${topTask.id}"]`).remove();
+
+      tasksToAdd.reverse().forEach((task) => {
         const { type } = task;
         const newTask = new taskTypes[type](task);
+        manager.state.tasks.unshift(newTask);
         const html = newTask.createMarkup();
         manager.tasksBoxEl.insertAdjacentHTML('afterbegin', html);
       });
@@ -126,7 +140,31 @@ export default class WSEventsHandler {
     }
 
     if (method === 'switchPinnedOff') {
+      manager.showPinnedTask();
       manager.hidePinnedMessage();
+      manager.infoClose();
+      return;
+    }
+
+    if (method === 'showInfoPanel') {
+      data.forEach((id) => {
+        const task = getTaskById(manager.state, id);
+        createInfoTask(manager, taskTypes[task.type], task);
+      });
+      return;
+    }
+
+    if (method === 'closeInfoPanel') {
+      manager.infoClose();
+      return;
+    }
+
+    if (method === 'getFavorite') {
+      data.favorites.forEach((task) => {
+        createInfoTask(manager, taskTypes[task.type], task);
+      });
+
+      manager.ctrlAsideEl.classList.remove('hidden');
     }
   }
 

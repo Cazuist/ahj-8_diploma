@@ -42,4 +42,31 @@ export default class TextTask extends Task {
       </div>
     `;
   }
+
+  createInfoMarkup() {
+    return `
+      <div class="task info_task-block info_text-block"
+        data-id="${this.id}" 
+        data-task-type="${this.type}">
+
+        <div class="info_task_block_header">
+          ${this.getType(this)}
+        </div>
+
+        <div class="info_task_block_main">
+          <div class="text-content">${this.content}</div>         
+        </div>
+        
+        <div class="task_block_footer info_task_block_footer">
+          <div class="footer_coords_box">
+            <span class="coords_field">[${this.getCoordsString()}]</span>
+          </div>
+
+          <div class="footer_time_box">
+            ${this.getDate()}
+          </div>
+        </div>
+      </div>
+    `;
+  }
 }

@@ -28,11 +28,39 @@ export default class CoordsTask extends Task {
           <div class="coords_main_box">
             <div class="coords_title">Мое местоположение:</div>
             <div class="coords_text-content">${this.formatCoordsToLink(this.coords)}</div>
-          </div>
-                   
+          </div>                   
         </div>
         
         <div class="task_block_footer">
+          <div class="footer_coords_box">
+          </div>
+
+          <div class="footer_time_box">
+            ${this.getDate()}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  createInfoMarkup() {
+    return `
+      <div class="task info_task-block info_coords-block"
+        data-id="${this.id}" 
+        data-task-type="${this.type}">
+
+        <div class="info_task_block_header">
+          ${this.getType(this)}
+        </div>
+
+        <div class="info_task_block_main">
+          <div class=coords_preview_box></div>
+          <div class="coords_main_box">
+            <div class="coords_text-content">${this.formatCoordsToLink(this.coords)}</div>
+          </div>         
+        </div>
+        
+        <div class="task_block_footer info_task_block_footer">
           <div class="footer_coords_box">
           </div>
 

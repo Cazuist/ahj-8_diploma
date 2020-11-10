@@ -67,19 +67,17 @@
 }
 
 /* Control aside icon -------------------*/
-.connection_icon {
+.connection_icon,
+.geo_access_icon.switch-on,
+.devices_icon {
   background-color: palegreen;
   border: 2px solid green;
 }
 
-.connection_icon.offline {
+.connection_icon.offline,
+.devices_icon.disabled_devices {
   background-color: white;
   border: none;
-}
-
-.geo_access_icon.switch-on {
-  background-color: palegreen;
-  border: 2px solid green;
 }
 
 .geo_access_icon.switch-off {
@@ -95,9 +93,16 @@
   content: "\f279";
 }
 
+.devices_icon::before {
+  content: "\f03d";
+}
+
 .offline.connection_icon::after,
 .disabled_geo.geo_access_icon::after,
-.geo_send_icon.blocked::after {
+.geo_send_icon.blocked::after,
+.audio_icon.blocked::after,
+.video_icon.blocked::after,
+.disabled_devices.devices_icon::after {
   position: absolute;
   top: -2px;
   left: 0;
@@ -228,13 +233,21 @@
   content: "\f006";
 }
 
-.is-favorite .favorite_icon::before {
+.is-favorite .favorite_icon::before,
+.favorite_filter_icon::before {
   content: "\f005";
   color: darkorange;
   font-size: 18px;
 }
 
-.pinned_close_icon::before {
+.info_panel_close_icon {
+  position: absolute;
+  right: 10px;
+  top: calc(50% - 15px);
+}
+
+.pinned_close_icon::before,
+.info_panel_close_icon::before {
   content: "\f00d";
   color: gray;
   font-size: 20px;

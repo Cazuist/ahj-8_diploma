@@ -1,7 +1,9 @@
 import {
   getTaskById,
   updateStates,
+  createInfoTask,
 } from '../functions/functions';
+import tasksTypes from '../tasks/tasksTypes';
 
 export default function taskHandler(event) {
   const { target, target: { classList } } = event;
@@ -59,14 +61,19 @@ export default function taskHandler(event) {
   }
 
   if (classList.contains('pinned_close_icon')) {
+    this.showPinnedTask();
     this.hidePinnedMessage();
+    this.infoClose();
     updateStates(this, 'switchPinnedOff');
     return;
   }
 
   if (classList.contains('pinned_preview_box')) {
-    // console.log('Show me task info!');
-    // console.log(this.state.conditions.pinnedTask);
+    const pinnedTask = this.state.tasks.find(({ isPinned }) => isPinned);
 
+    if (this.state.info.length) return;
+
+    createInfoTask(this, tasksTypes[pinnedTask.type], pinnedTask);
+    updateStates(this, 'showInfoPanel', this.state.info);
   }
 }

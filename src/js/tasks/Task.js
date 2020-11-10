@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
+import { getPinnedType } from '../functions/functions';
 
 export default class Task {
   constructor(data) {
@@ -8,6 +9,7 @@ export default class Task {
     this.id = data.id || uuidv4();
     this.timestamp = data.timestamp || moment().valueOf();
     this.coords = data.coords || null;
+    this.loaded = true;
   }
 
   init(container, state) {
@@ -35,7 +37,7 @@ export default class Task {
   }
 
   getSpecialsClasses() {
-    return `${this.isFavorite ? 'is-favorite' : ''} ${this.isPinned ? 'is-pinned hidden' : ''}`;
+    return `${this.isFavorite ? 'is-favorite' : ''} ${this.isPinned ? 'is-pinned' : ''}`;
   }
 
   addToState(state) {
@@ -59,5 +61,9 @@ export default class Task {
     }
 
     return `${basename}.${extname}`;
+  }
+
+  getType(task) {
+    return getPinnedType(task);
   }
 }

@@ -26,7 +26,7 @@ function formStream$(modal) {
   );
 }
 
-function getCurrentPosition$(modal) {
+export function getCurrentPosition$(modal) {
   return new Observable((observer) => {
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude } }) => {

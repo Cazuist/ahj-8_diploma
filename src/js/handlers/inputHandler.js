@@ -37,7 +37,7 @@ export default function inputHandler(event) {
     const Task = tasksTypes.message;
     const content = parseInputContent(message);
 
-    newTaskStream$(this).subscribe((data) => {
+    const stream$ = newTaskStream$(this).subscribe((data) => {
       if (data === 'Invalid coords') {
         this.getModal('geoModal').showError('Вы ввели неправильные координаты!');
         return;
@@ -47,20 +47,21 @@ export default function inputHandler(event) {
       updateStates(this, 'newTask', this.creatingTask);
       this.creatingTask = null;
       document.querySelector('.send_icon').classList.remove('active');
+      stream$.unsubscribe();
     });
   }
 
   if (classList.contains('upload_input')) {
     const file = event.target.files[0];
 
-    newTaskStream$(this).subscribe((data) => {
+    const stream$ = newTaskStream$(this).subscribe((data) => {
       if (data === 'Invalid coords') {
         this.getModal('geoModal').showError('Вы ввели неправильные координаты!');
         return;
       }
 
       createUploadTask(this, file, data);
-      document.querySelector('.send_icon').classList.remove('active');
+      stream$.unsubscribe();
     });
   }
 }

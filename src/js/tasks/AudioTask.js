@@ -27,11 +27,39 @@ export default class AudioTask extends Task {
         </div>
 
         <div class="task_block_main">
-          <audio class="task_audio" src="${this.src}" controls>
+          <audio class="task_audio" src="${this.src}" controls></audio>
           <a href="${this.src}" class="download_link hidden" download="${this.name}"></a>         
         </div>
         
         <div class="task_block_footer">
+          <div class="footer_coords_box">
+            <span class="coords_field">[${this.getCoordsString()}]</span>
+          </div>
+
+          <div class="footer_time_box">
+            ${this.getDate()}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  createInfoMarkup() {
+    return `
+      <div class="task info_task-block info_audio-block"
+        data-id="${this.id}" 
+        data-task-type="${this.type}">
+
+        <div class="info_task_block_header">
+          ${this.getType(this)}
+        </div>
+
+        <div class="info_task_block_main">
+          <audio class="info_task_audio" src="${this.src}" controls></audio>
+          <div>${this.name}</div>         
+        </div>
+        
+        <div class="task_block_footer info_task_block_footer">
           <div class="footer_coords_box">
             <span class="coords_field">[${this.getCoordsString()}]</span>
           </div>

@@ -4,6 +4,8 @@ import AudioTask from './AudioTask';
 import VideoTask from './VideoTask';
 import FileTask from './FileTask';
 import CoordsTask from './CoordsTask';
+import AudioRecordTask from './AudioRecordTask';
+import VideoRecordTask from './VideoRecordTask';
 
 export const tasksTypes = {
   message: TextTask,
@@ -11,6 +13,8 @@ export const tasksTypes = {
   image: ImageTask,
   video: VideoTask,
   audio: AudioTask,
+  audio_record: AudioRecordTask,
+  video_record: VideoRecordTask,
   application: FileTask,
   file: FileTask,
 };

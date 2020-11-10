@@ -8,7 +8,7 @@ import {
 import { newTaskStream$ } from '../functions/newTaskFunctions';
 
 export default function onStickClickHandler(event) {
-  const { target: { classList } } = event;
+  const { target, target: { classList } } = event;
 
   if (classList.contains('geo_icon')) {
     classList.toggle('geo_true');
@@ -32,7 +32,7 @@ export default function onStickClickHandler(event) {
     const Task = tasksTypes.message;
     const content = parseInputContent(message);
 
-    newTaskStream$(this).subscribe((data) => {
+    const stream$ = newTaskStream$(this).subscribe((data) => {
       if (data === 'Invalid coords') {
         this.getModal('geoModal').showError('Вы ввели неправильные координаты!');
         return;
@@ -42,22 +42,23 @@ export default function onStickClickHandler(event) {
       updateStates(this, 'newTask', this.creatingTask);
       this.creatingTask = null;
       document.querySelector('.send_icon').classList.remove('active');
+      stream$.unsubscribe();
     });
     return;
   }
 
   if (classList.contains('geo_send_icon')) {
+    if (!this.state.conditions.geo) {
+      showErrorBox('Разрешите вывод координат!');
+    }
+
     newTaskStream$(this).subscribe((data) => {
       if (data === 'Invalid coords') {
         this.getModal('geoModal').showError('Вы ввели неправильные координаты!');
         return;
       }
 
-      if (!data) {
-        this.getModal('geoModal').showError('Необходимо ввести координаты!');
-        showErrorBox('Разрешите вывод координат!');
-        return;
-      }
+      if (!data) return;
 
       createTextTask(this, tasksTypes.coords, { coords: data });
       updateStates(this, 'newTask', this.creatingTask);
@@ -69,5 +70,18 @@ export default function onStickClickHandler(event) {
         clearTimeout(interval);
       }, 1000);
     });
+  }
+
+  if (classList.contains('audio_icon') || classList.contains('video_icon')) {
+    const type = target.className.includes('audio') ? 'audio' : 'video';
+
+    this.mediaRecorder.recordStream(type, this.modals.recordModal)
+      .then((recorder) => {
+        recorder.start();
+      })
+      .catch((err) => {
+        this.modals.errModal.setMessage(err.message);
+        this.modals.errModal.show();
+      });
   }
 }

@@ -11,7 +11,6 @@ export default function modalHandler(event) {
   const modal = this.modals[type];
 
   if (type === 'geoModal') return;
-
   if (!classList.contains('modal-btn')) return;
 
   if (classList.contains('cancel-btn')) {
@@ -44,5 +43,16 @@ export default function modalHandler(event) {
     modal.hide();
     updateStates(this, 'editTask', { task: editedTask, id });
     this.taskUnderAction = null;
+    return;
+  }
+
+  if (classList.contains('cancel-record-btn')) {
+    this.mediaRecorder.stopRecord();
+    return;
+  }
+
+  if (classList.contains('save-record-btn')) {
+    this.mediaRecorder.addStopListener();
+    this.mediaRecorder.stopRecord();
   }
 }

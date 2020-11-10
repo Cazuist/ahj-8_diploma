@@ -6,7 +6,7 @@ import taskHandler from './taskHandler';
 import dragAndDropHandler from './dragAndDropHandler';
 import WSEventsHandler from './WSEventsHandler';
 import scrollHandler from './scrollHandler';
-import controlHandler from './controlHandler';
+import asideHandler from './controlHandler';
 
 export default {
   onLoadHandler,
@@ -17,5 +17,5 @@ export default {
   dragAndDropHandler,
   WSEventsHandler,
   scrollHandler,
-  controlHandler,
+  asideHandler,
 };

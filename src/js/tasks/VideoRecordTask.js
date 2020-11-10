@@ -1,19 +1,18 @@
 import Task from './Task';
 
-export default class VideoTask extends Task {
+export default class VideoRecordTask extends Task {
   constructor(data) {
     super(data);
     this.src = data.src;
     this.name = data.name;
-    this.type = 'video';
+    this.type = 'audio_record';
   }
 
   createMarkup() {
     return `
-      <div class="task task-block video-block ${this.getSpecialsClasses()}"
+      <div class="task task-block video_record-block ${this.getSpecialsClasses()}"
       data-id="${this.id}"
-      data-task-type="video">
-
+      data-task-type="video_record">
         <div class="task_block_header">
           <div class="header_status_box">
             <span class="icon header_status pinned_icon"></span>
@@ -28,16 +27,8 @@ export default class VideoTask extends Task {
         </div>
 
         <div class="task_block_main">
-          <div class="preview_box">
-            <video class="video-block_preview_video" controls>
-              <source src="${this.src}" type='video/ogg; codecs="theora, vorbis"'>
-              <source src="${this.src}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
-              <source src="${this.src}" type='video/webm; codecs="vp8, vorbis"'>
-              <source src="${this.src}" type='video/wmv; codecs="vp8, vorbis"'>
-            </video>
-          </div>          
-          <span class="video_name_box">${this.getFormattedName(this.name)}</span>
-          <a href="${this.src}" class="download_link hidden" download="${this.name}"></a>
+          <audio class="task_audio" src="${this.src}" controls>
+          <a href="${this.src}" class="download_link hidden" download="${this.name}"></a>         
         </div>
         
         <div class="task_block_footer">
@@ -55,7 +46,7 @@ export default class VideoTask extends Task {
 
   createInfoMarkup() {
     return `
-      <div class="task info_task-block info_video-block"
+      <div class="task info_task-block info_video_record-block"
         data-id="${this.id}" 
         data-task-type="${this.type}">
 

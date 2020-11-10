@@ -24,9 +24,9 @@
           <div class="control_aside_task system_info">
             <header class="control_task_header">
               <span class="control_task_header_title">System status</span>
-              <span class="control_task_header_icon"></span>
+              <span class="control_task_header_icon down"></span>
             </header>
-            <div class="control_task_content">
+            <div class="control_task_content hidden">
               <div class="aside_task_content_row">
                 <span class="status_icon geo_access_icon disabled_geo"></span>
                 <span class="task_content_row_text">Disabled</span>
@@ -36,16 +36,21 @@
                 <span class="status_icon connection_icon offline"></span>
                 <span class="task_content_row_text">Offline</span>
               </div> 
+
+              <div class="aside_task_content_row">
+                <span class="status_icon devices_icon"></span>
+                <span class="task_content_row_text">Record is supported</span>
+              </div>
             </div>
           </div>
 
           <div class="control_aside_task content_info">
             <header class="control_task_header">
               <span class="control_task_header_title">Files manager</span>
-              <span class="control_task_header_icon"></span>
+              <span class="control_task_header_icon down"></span>
             </header>
 
-            <div class="control_task_content file_manager">
+            <div class="control_task_content file_manager hidden">
               <div class="aside_task_content_row video_record_row">
                 <span class="icon video_record_icon">&#127909;</span>
                 <span class="task_content_row_text">Video records</span>
@@ -108,8 +113,8 @@
             </header>
             <div class="control_task_content">
               <div class="aside_task_content_row">
-                <span class="icon"></span>
-                <span class="task_content_row_text">Some filter</span>
+                <span class="icon favorite_filter_icon"></span>
+                <span class="task_content_row_text">Favorite</span>
               </div>
             </div>
           </div>
@@ -154,28 +159,28 @@
 
             <div class="icons-box footer_action_icons_box">
               <span class="icon action_icon skip_icon blocked transp"></span>
-              <span class="icon action_icon audio_icon blocked transp"></span>
-              <span class="icon action_icon video_icon blocked transp"></span>
+              <span class="icon action_icon audio_icon"></span>
+              <span class="icon action_icon video_icon"></span>
               <span class="icon action_icon at_icon blocked transp"></span>
               <span class="icon action_icon upload_icon"></span>
               <span class="icon action_icon smile_icon blocked transp"></span>
               <span class="icon action_icon geo_send_icon"></span>
               <span class="icon action_icon geo_icon geo_true"></span>
-              <span class="icon action_icon send_icon blocked transp"></span>
+              <span class="icon action_icon send_icon blocked"></span>
             </div>
           </div>
         </footer>
       </main>
       
-      <aside class="manager-aside control_aside">
-        <header class="main_container_header control_header">Info panel</header>
-        <div class="aside_wrapper">          
+      <aside class="manager-aside info_aside hidden">
+        <header class="main_container_header control_header">
+          Info panel
+          <div class="info_panel_close_icon icon"></div>
+        </header>
+        <div class="aside_wrapper info_aside_wrapper">          
         </div>
       </aside>
     </div>
   </div>
 </body>
 </html>
-
-
-<!--<p id="p">Example: <i>italic</i> and <b>bold</b></p>-->

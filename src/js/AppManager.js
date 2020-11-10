@@ -1,8 +1,11 @@
 import GeoAddModal from './modals/GeoAddModal';
 import DeleteModal from './modals/DeleteModal';
 import EditModal from './modals/EditModal';
+import ErrorModal from './modals/ErrorModal';
+import RecordModal from './modals/RecordModal';
 import eventHandlers from './handlers/eventHandlers';
 import { getTaskById, getPinnedType } from './functions/functions';
+import { MediaStreamRecorder } from './functions/mediaStream';
 
 export default class AppManager {
   constructor(url) {
@@ -11,7 +14,8 @@ export default class AppManager {
 
     this.state = {
       tasks: [],
-      conditions: { geo: true, pinnedTask: null, lastChange: null },
+      conditions: { geo: false, pinnedTask: null, lastChange: null },
+      info: [],
     };
 
     this.geoAllowedStatus = true;
@@ -25,6 +29,7 @@ export default class AppManager {
     this.initWSConnection();
     this.initHandlers();
     this.registerEvents();
+    this.mediaRecorder = new MediaStreamRecorder(this);
   }
 
   initElements() {
@@ -34,7 +39,8 @@ export default class AppManager {
     this.forms = document.querySelectorAll('.form-modal');
     this.uploadEl = document.querySelector('.upload_input');
     this.dragableEl = document.querySelector('.draggable_area');
-    this.controlPanel = document.querySelector('.media_status_aside');
+    this.mngAsideEl = document.querySelector('.media_status_aside');
+    this.ctrlAsideEl = document.querySelector('.info_aside');
     this.pinnedMessage = document.querySelector('.pinned_message');
   }
 
@@ -43,6 +49,8 @@ export default class AppManager {
       geoModal: new GeoAddModal(),
       delModal: new DeleteModal(),
       editModal: new EditModal(),
+      errModal: new ErrorModal(),
+      recordModal: new RecordModal(),
     };
   }
 
@@ -111,8 +119,12 @@ export default class AppManager {
       eventHandlers.scrollHandler.call(this);
     });
 
-    this.controlPanel.addEventListener('click', (event) => {
-      eventHandlers.controlHandler.call(this, event);
+    this.mngAsideEl.addEventListener('click', (event) => {
+      eventHandlers.asideHandler.call(this, event);
+    });
+
+    this.ctrlAsideEl.addEventListener('click', (event) => {
+      eventHandlers.asideHandler.call(this, event);
     });
 
     // window.addEventListener('beforeunload', () => this.onUnload());
@@ -137,14 +149,7 @@ export default class AppManager {
   }
 
   hidePinnedMessage() {
-    const pinnedElement = document.querySelector('.is-pinned');
-    const pinnedTask = this.state.tasks.find(({ isPinned }) => isPinned);
-
     this.pinnedMessage.classList.add('hidden');
-    pinnedElement.classList.remove('hidden', 'is-pinned');
-    pinnedElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
-
-    pinnedTask.switchPinned();
     this.state.conditions.pinnedTask = null;
   }
 
@@ -162,6 +167,36 @@ export default class AppManager {
 
     this.state.conditions.pinnedTask = id;
     this.taskUnderAction = null;
+  }
+
+  showPinnedTask() {
+    const pinnedId = this.state.conditions.pinnedTask;
+    const pinnedTaskIdx = this.state.tasks.findIndex((task) => task.id === pinnedId);
+    const lastIndex = this.state.tasks.length - 1;
+    const pinnedElement = document.querySelector('.is-pinned');
+    const pinnedTask = this.state.tasks.find(({ isPinned }) => isPinned);
+
+    if (pinnedTaskIdx < lastIndex) {
+      const nextTaskId = this.state.tasks[pinnedTaskIdx + 1].id;
+      const nextElement = document.querySelector(`[data-id="${nextTaskId}"]`);
+      nextElement.insertAdjacentElement('beforebegin', pinnedElement);
+    } else if (!lastIndex) {
+      this.tasksBoxEl.insertAdjacentElement('beforebegin', pinnedElement);
+    } else {
+      const prevTaskId = this.state.tasks[pinnedTaskIdx - 1].id;
+      const prevElement = document.querySelector(`[data-id="${prevTaskId}"]`);
+      prevElement.insertAdjacentElement('afterend', pinnedElement);
+    }
+
+    pinnedElement.classList.remove('hidden', 'is-pinned');
+    pinnedElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    pinnedTask.switchPinned();
+  }
+
+  infoClose() {
+    this.ctrlAsideEl.lastElementChild.innerHTML = '';
+    this.ctrlAsideEl.classList.add('hidden');
+    this.state.info = [];
   }
 
   getLocalStorage() {
