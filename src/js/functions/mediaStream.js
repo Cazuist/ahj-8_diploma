@@ -59,9 +59,10 @@ export class MediaStreamRecorder {
         });
 
         if (type === 'video') {
-          this.videoStream = document.querySelector('.video_box');
-          this.videoStream.srcObject = stream;
-          this.videoStream.play();
+          const videoStream = document.querySelector('.video_box');
+          videoStream.srcObject = stream;
+          videoStream.play();
+          this.videoStream = videoStream;
         }
 
         const recorder = new MediaRecorder(stream);
