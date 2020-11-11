@@ -46,7 +46,7 @@ export class MediaStreamRecorder {
     this.chunks = [];
     this.stream = null;
     this.recorder = null;
-    this.videoStream = null;
+    this.videoEL = document.querySelector('.video_box');
     this.type = null;
   }
 
@@ -56,14 +56,7 @@ export class MediaStreamRecorder {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
           video: type === 'video',
-        });
-
-        if (type === 'video') {
-          const videoStream = document.querySelector('.video_box');
-          videoStream.srcObject = stream;
-          videoStream.play();
-          this.videoStream = videoStream;
-        }
+        });        
 
         const recorder = new MediaRecorder(stream);
 
@@ -73,6 +66,12 @@ export class MediaStreamRecorder {
           this.timer.start();
           this.type = type;
           modal.show();
+
+          if (type === 'video') {
+            this.videoEL.classList.remove('hidden');
+            this.videoEL.srcObject = stream;
+            this.videoEL.play();
+          }
         });
 
         recorder.addEventListener('dataavailable', (event) => {
@@ -91,8 +90,9 @@ export class MediaStreamRecorder {
       const blob = new Blob(this.chunks);
       const src = URL.createObjectURL(blob);
 
-      if (this.type === 'video') {
-        this.videoStream.srcObject = null;
+      if (this.type === 'video') {        
+        this.videoEL.srcObject = null;
+        this.videoEL.classList.add('hidden');
       }
 
       const stream$ = newTaskStream$(this.manager).subscribe((data) => {
@@ -119,7 +119,6 @@ export class MediaStreamRecorder {
     this.stream.getTracks().forEach((track) => track.stop());
     this.recorder = null;
     this.stream = null;
-    this.videoStream = null;
     this.chunks = [];
   }
 

@@ -14,8 +14,8 @@ export default class RecordModal extends Modal {
           <p class="message-content">
             Recording in progress!
           </p>
-          <div class="preview_video_box hidden">
-            <video class="video_box" muted></video> 
+          <div class="preview_video_box">
+            <video class="video_box hidden" muted></video> 
           </div>          
           <div class="modal-btn-row modal-row">
             <button class="modal-btn record-btn save-record-btn"></button>
