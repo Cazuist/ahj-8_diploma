@@ -27,7 +27,12 @@ export default class VideoRecordTask extends Task {
         </div>
 
         <div class="task_block_main">
-          <audio class="task_audio" src="${this.src}" controls>
+          <video class="video-block_preview_video" controls>
+            <source src="${this.src}" type='video/ogg; codecs="theora, vorbis"'>
+            <source src="${this.src}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+            <source src="${this.src}" type='video/webm; codecs="vp8, vorbis"'>
+            <source src="${this.src}" type='video/wmv; codecs="vp8, vorbis"'>
+          </video>
           <a href="${this.src}" class="download_link hidden" download="${this.name}"></a>         
         </div>
         
